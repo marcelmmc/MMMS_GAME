@@ -1,8 +1,10 @@
 import itertools
 
+CHARACTERS_PER_WORD = 5
+
 # typing speed (words per minute)
 def wpm(keypresses, duration):
-    return (len(keypresses) / (duration / 60))
+    return (len(keypresses) / (CHARACTERS_PER_WORD * duration / 60))
 
 # accuracy (amount of keys backspaced)
 def accuracy(keypresses):
