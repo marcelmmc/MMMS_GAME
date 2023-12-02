@@ -4,6 +4,7 @@ import json
 import pprint
 import convert
 import mark_data
+import csv
 
 pp = pprint.PrettyPrinter(indent=2)
 
@@ -58,7 +59,12 @@ pp.pprint(processed_key_presses)
 
 waiting_for_input = input()
 
-print("* RESULTS *")
-print(f"Words per minute: {mark_data.wpm(processed_key_presses, test_time)}")
+print("Saving results...")
+mark_data.create_csv_file("statistics.csv")
+mark_data.save_data("statistics.csv", [('wpm', mark_data.wpm(processed_key_presses, test_time))])
+mark_data.save_data("statistics.csv", [('accuracy', 100 * mark_data.accuracy(processed_key_presses))])
+mark_data.save_data("statistics.csv", [('mistyped', mark_data.mistyped_keys(processed_key_presses))])
+
+print(f"WPM: {mark_data.wpm(processed_key_presses, test_time)}")
 print(f"Accuracy: {mark_data.accuracy(processed_key_presses) * 100}%")
 print(f"Mistyped keys: {mark_data.mistyped_keys(processed_key_presses)}")

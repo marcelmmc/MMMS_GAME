@@ -1,4 +1,5 @@
 import itertools
+import csv
 
 CHARACTERS_PER_WORD = 5
 
@@ -28,9 +29,21 @@ def mistyped_keys(keypresses):
 
     # flatten the list, remove the duplicates
     result = list(itertools.chain.from_iterable(result))
-    return set(result)
+    return list(set(result))
 
 # typing frequency per side
 # at what speed do you type with either hand
 def frequency_per_side():
     pass
+
+def create_csv_file(file_name):
+    with open(file_name, 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        field = ['type', 'value']
+        writer.writerow(field)
+
+def save_data(file_name, data):
+    with open(file_name, 'a', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        for input in data:
+            writer.writerow(input)
