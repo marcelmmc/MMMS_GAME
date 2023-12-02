@@ -3,7 +3,7 @@ import time
 
 test_time = 10
 
-waiting_for_input = input()
+waiting_for_input = input("Press any enter to start test")
 start_time = time.time()
 
 def processEvents(message):
