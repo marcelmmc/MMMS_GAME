@@ -8,7 +8,7 @@ class Side(Enum):
     ERROR = 4
 
 #Create list of keyboards by mechanical, semimechaniacal, small, and other
-
+keyboards = ['Mechanical', 'Semimechanical', 'Membrane', 'Other']
 
 #Key distance from before and after
 rights_key = ['q','w','e','r','t','g','f','d','s','a','z','x','x','c','b','\`']
