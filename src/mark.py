@@ -3,10 +3,11 @@ import time
 import json
 import pprint
 import convert
+import mark_data
 
 pp = pprint.PrettyPrinter(indent=2)
 
-test_time = 30
+test_time = 10
 
 waiting_for_input = input()
 start_time = time.time()
@@ -52,6 +53,12 @@ pp.pprint(unprocessed_key_presses)
 print(20 * "-")
 
 processed_key_presses = convert.process_keypresses(unprocessed_key_presses, keyboard_name)
+processed_key_presses = [i for i in processed_key_presses if i is not None] # remove None
 pp.pprint(processed_key_presses)
 
 waiting_for_input = input()
+
+print("* RESULTS *")
+print(f"Words per minute: {mark_data.wpm(processed_key_presses, test_time)}")
+print(f"Accuracy: {mark_data.accuracy(processed_key_presses) * 100}%")
+print(f"Mistyped keys: {mark_data.mistyped_keys(processed_key_presses)}")
