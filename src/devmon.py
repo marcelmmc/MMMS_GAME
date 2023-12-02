@@ -9,7 +9,7 @@ binaries = {
 }
 
 if platform.system() not in binaries:
-    print("\x1b[31mYour platform ("+platform.system()+") is not supported by this software.\x1b[0m")
+    print(f"\x1b[31mYour platform ({platform.system()}) is not supported by this software.\x1b[0m")
     exit(1)
 
 binary = binaries[platform.system()]
