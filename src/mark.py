@@ -6,7 +6,7 @@ import convert
 
 pp = pprint.PrettyPrinter(indent=2)
 
-test_time = 10
+test_time = 30
 
 waiting_for_input = input()
 start_time = time.time()
@@ -26,6 +26,7 @@ def processEvents(message):
 
 mouseUnitId = 0
 keyboardUnitId = 0
+keyboard_name = ""
 
 print ("Devices list")
 logidevmon.list_devices()
@@ -34,6 +35,7 @@ for device in logidevmon.LOGITECH_DEVICES:
     
     if (device["type"] == "keyboard"):
         keyboardUnitId = device['unitId']
+        keyboard_name = device['name']
     
     if (device["type"] == "mouse"):
         mouseUnitId = device['unitId']
@@ -49,7 +51,7 @@ pp.pprint(unprocessed_key_presses)
 
 print(20 * "-")
 
-processed_key_presses = convert.process_keypresses(unprocessed_key_presses)
+processed_key_presses = convert.process_keypresses(unprocessed_key_presses, keyboard_name)
 pp.pprint(processed_key_presses)
 
 waiting_for_input = input()
