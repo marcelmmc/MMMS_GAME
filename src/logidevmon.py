@@ -146,12 +146,18 @@ def set_thumbWheel_config(unitId, divert, hires, invert):
     asyncio.get_event_loop().run_until_complete(send_ws_msg_and_forget("set","thumbWheelConfig",args))
 
 async def _read_events(callback):
-    global DEVMON_URI    
+    global DEVMON_URI
     async with websockets.connect(DEVMON_URI) as websocket:        
         async for message in websocket:
             keepReading = callback(message)
             if not keepReading:
+                print("bye bye")
                 return    
 
 def read_events(callback):
     asyncio.get_event_loop().run_until_complete(_read_events(callback))
+
+
+def read_events_time(callback, timeout):
+    asyncio.get_event_loop().run_until_complete(asyncio.wait_for(_read_events(callback), timeout=timeout))
+
