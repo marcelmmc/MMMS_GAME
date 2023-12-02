@@ -4,7 +4,7 @@ import os
 repo = os.path.dirname(os.path.dirname(__file__))
 binaries = {
     "Linux": os.path.join(repo, "devmon-logi/linux/x64/logi-devmon"),
-    "s": os.path.join(repo, "devmon-logi/macos/logi-devmon"),
+    "Darwin": os.path.join(repo, "devmon-logi/macos/logi-devmon"),
     "Windows": os.path.join(repo, "devmon-logi/Windows/x64/logi-devmon.exe"),
 }
 
