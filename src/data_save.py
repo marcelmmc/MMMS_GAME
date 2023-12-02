@@ -19,7 +19,6 @@ def save_data(file_name, data):
             writer.writerow(input)
 
 
-mock_data = [(0.1, 'a', 'MX S'), (0.15, 'k', 'MX S'), (0.2, 'a', 'MX S'), (0.25, 'k', 'MX S'), (0.3, 'a', 'MX S'), (0.35, 'k', 'MX S'), (0.4, 'a', 'MX S'), (0.45, 'k', 'MX S'), (0.5, 'a', 'MX S'), (0.55, 'k', 'MX S'), (0.6, 'a', 'MX S'), (0.65, 'k', 'MX S'), (0.7, 'a', 'MX S'), (0.75, 'k', 'MX S'), (0.8, 'a', 'MX S'), (0.85, 'k', 'MX S'), (0.9, 'a', 'MX S'), (0.95, 'k', 'MX S'), (1.0, 'a', 'MX S'), (1.05, 'k', 'MX S'), (1.1, 'a', 'MX S'), (1.15, 'k', 'MX S'), (1.2, 'a', 'MX S'), (1.25, 'k', 'MX S'), (1.3, 'a', 'MX S'), (1.35, 'k', 'MX S'), (1.4, 'a', 'MX S'), (1.45, 'k', 'MX S'), (1.5, 'a', 'MX S'), (1.55, 'k', 'MX S'), (1.6, 'a', 'MX S'), (1.65, 'k', 'MX S'), (1.7, 'a', 'MX S'), (1.75, 'k', 'MX S'), (1.8, 'a', 'MX S'), (1.85, 'k', 'MX S'), (1.9, 'a', 'MX S'), (1.95, 'k', 'MX S'), (2.0, 'a', 'MX S'), (2.05, 'k', 'MX S'), (2.1, 'a', 'MX S'), (2.15, 'k', 'MX S'), (2.2, 'a', 'MX S'), (2.25, 'k','')]
 #--------------------------------------------------
 # Data Processing
 #--------------------------------------------------
@@ -65,17 +64,28 @@ def key_time_difference(data):
 
 #Type of keyboard
 
+#Erase backspace and space
+def clean_data(data):
+    data_clean = data
+    for i in range(len(data)):
+        if data[i][1] != ' ' or data[i][1] != '':
+            data_clean.append(data[i])
+    return data_clean
+
 #Create final data
 def create_final_data(data):
-    side = side_calculations(data)
-    time_difference = key_time_difference(data)
+    dataclean = clean_data(data)
+    side = side_calculations(dataclean)
+    time_difference = key_time_difference(dataclean)
     keyboard = data[0][2]
     final_data = []
     for i in range(len(side)):
         final_data.append((time_difference[i], side[i], keyboard))
     return final_data
 
+
 #Running test
+mock_data = [(0, '', 'MX S'),(0.1, 'a', 'MX S'), (0.15, 'k', 'MX S'), (0.2, 'a', 'MX S'), (0.25, 'k', 'MX S'), (0.3, 'a', 'MX S'), (0.35, 'k', 'MX S'), (0.4, 'a', 'MX S'), (0.45, 'k', 'MX S'), (0.5, 'a', 'MX S'), (0.55, 'k', 'MX S'), (0.6, 'a', 'MX S'), (0.65, 'k', 'MX S'), (0.7, 'a', 'MX S'), (0.75, 'k', 'MX S'), (0.8, 'a', 'MX S'), (0.85, 'k', 'MX S'), (0.9, 'a', 'MX S'), (0.95, 'k', 'MX S'), (1.0, 'a', 'MX S'), (1.05, 'k', 'MX S'), (1.1, 'a', 'MX S'), (1.15, 'k', 'MX S'), (1.2, 'a', 'MX S'), (1.25, 'k', 'MX S'), (1.3, 'a', 'MX S'), (1.35, 'k', 'MX S'), (1.4, 'a', 'MX S'), (1.45, 'k', 'MX S'), (1.5, 'a', 'MX S'), (1.55, 'k', 'MX S'), (1.6, 'a', 'MX S'), (1.65, 'k', 'MX S'), (1.7, 'a', 'MX S'), (1.75, 'k', 'MX S'), (1.8, 'a', 'MX S'), (1.85, 'k', 'MX S'), (1.9, 'a', 'MX S'), (1.95, 'k', 'MX S'), (2.0, 'a', 'MX S'), (2.05, 'k', 'MX S'), (2.1, 'a', 'MX S'), (2.15, 'k', 'MX S'), (2.2, 'a', 'MX S'), (2.25, 'k','')]
 def run_test():
     print("Running test")
     file_name = "test.csv"
