@@ -10,7 +10,6 @@ class TitleScreen:
         self.change_screen = change_screen
         self.dictionaries = Dictionary.list_dictionaries()
         self.selected_dictionary = 0
-        print(self.dictionaries)
 
     def run(self, events: List[pygame.event.Event]):
         for event in events:
