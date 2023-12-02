@@ -11,7 +11,7 @@ num_word_per_sentence = 10
 num_sentences = 6
 margin = 20
 
-GAME_FONT = pygame.freetype.Font(None, font_size)
+GAME_FONT = pygame.freetype.SysFont("Consolas", font_size)
 GAME_FONT.origin = True
 space_size = GAME_FONT.get_rect(" ").width
 M_ADV_X = 4
@@ -61,27 +61,25 @@ class TypingTest:
         def render_line():
             sentence = " ".join(words_in_line)
             text_surf_rect = GAME_FONT.get_rect(sentence)
-            text_surf = pygame.Surface(text_surf_rect.size)
             text_surf_rect.topleft = (
                 margin,
                 y
             )
-            baseline = text_surf_rect.y
+            baseline = text_surf_rect.y + margin
             metrics = GAME_FONT.get_metrics(sentence)
-            x = 0
+            x = margin
             for (idx, (char, metric)) in enumerate(zip(sentence, metrics)):
                 i = idx + sentence_location
-                # rendered_character = GAME_FONT.render(test_sentence, True, colors[random.randint(0,len(colors)-1)])
+
                 if i == self.crt_char and self.blocking_writting:
-                    GAME_FONT.render_to(text_surf, (x, baseline), '_' if char == ' ' else char, red)
+                    GAME_FONT.render_to(surface, (x, baseline), '_' if char == ' ' else char, red)
                 elif self.crt_char > i:
-                    GAME_FONT.render_to(text_surf, (x, baseline), char, green)
+                    GAME_FONT.render_to(surface, (x, baseline), char, green)
                 else:
-                    GAME_FONT.render_to(text_surf, (x, baseline), char, gray)
+                    GAME_FONT.render_to(surface, (x, baseline), char, gray)
                 
                 x += metric[M_ADV_X]
 
-            surface.blit(text_surf, text_surf_rect)
 
 
         for word in self.words:
@@ -95,7 +93,7 @@ class TypingTest:
                 sentence_location += len(" ".join(words_in_line)) + 1
                 words_in_line = []
                 line_size = margin
-                y += margin
+                y += margin + margin
                 future_line_size = line_size + rect.width
             
             line_size = future_line_size
