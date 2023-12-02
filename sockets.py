@@ -1,20 +1,35 @@
+import logidevmon
 import time
-import websockets
 
-# test duration in seconds
-TEST_DURATION = 5
+test_time = 10
 
 waiting_for_input = input()
 start_time = time.time()
 
-while True:
-    print("Running")
-
+def processEvents(message):
+    global start_t 
     current_time = time.time()
     time_elapsed = current_time - start_time
-    print(f"Time elapsed: {time_elapsed}")
+    print (f"{time_elapsed}: {message}")
+    return (time_elapsed < test_time)
 
-    hello()
+mouseUnitId = 0
+keyboardUnitId = 0
+
+print ("Devices list")
+logidevmon.list_devices()
+for device in logidevmon.LOGITECH_DEVICES:
+    print (f"{device['unitId']} {device['type']} : {device['name']}")
     
-    if time_elapsed >= TEST_DURATION:
-        break
+    if (device["type"] == "keyboard"):
+        keyboardUnitId = device['unitId']
+    
+    if (device["type"] == "mouse"):
+        mouseUnitId = device['unitId']
+
+if (keyboardUnitId != 0):
+    print("Set spykeys on keyboard to true")
+    logidevmon.set_spyConfig(keyboardUnitId,False,True,False,False,False)
+    logidevmon.read_events(processEvents)
+    print ("Set spykeys to false")
+    logidevmon.set_spyConfig(keyboardUnitId,False,False,False,False,False)
