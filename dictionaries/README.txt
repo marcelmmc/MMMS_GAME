@@ -1,0 +1,1 @@
+The source of these dictionaries mostly come from https://monkeytype.com, licensed under the GNU General Public License v3.0. Please see the license file.
