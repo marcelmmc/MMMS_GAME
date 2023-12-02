@@ -7,6 +7,7 @@ class DictionaryError(Exception):
     def __init__(self, message: str):
         super(message)
 
+dictionaries_cache = {}
 repo = os.path.dirname(os.path.dirname(__file__))
 class Dictionary:
     """A class representing a dictionary"""
@@ -47,6 +48,9 @@ class Dictionary:
     
     @staticmethod
     def load_dictionary(name: str):
+        if name in dictionaries_cache:
+            return dictionaries_cache[name]
+
         path = os.path.join(
             Dictionary.dictionaries_path,
             name + ".json",
@@ -58,4 +62,6 @@ class Dictionary:
         d = json.loads(f.read())
         f.close()
         
-        return Dictionary(path, name, d["words"])
+        dictionary = Dictionary(path, name, d["words"])
+        dictionaries_cache[name] = dictionary
+        return dictionary
