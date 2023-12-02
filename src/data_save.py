@@ -1,7 +1,8 @@
-import mark
+#import mark
 import csv
 from definitions import *
 
+print("Data Save")
 #--------------------------------------------------
 # Data Save
 #--------------------------------------------------
@@ -45,11 +46,43 @@ def key_side_to_side(key1, key2):
         return Side.ERROR
     
 #modify data with side_to_side
-def modify_data(data, sides):
-    for i in range(len(data)):
-        if i == 0:
-            si
-        else:
-            data[i,1].append(key_side_to_side(data[i-1][1],data[i][1]))
-    return data
+def side_calculations(data):
+    """"
+    dict_data = [{'timestamp':i[0], 'character':i[1], 'device_type':i[2]} for i in data]
+    frame = pd.DataFrame(dict_data)
+    """
+    side = []
+    for i in range(1, len(data)):
+        side.append(key_side_to_side(data[i-1][1],data[i][1]))
+    return side
+
+#key time difference
+def key_time_difference(data):
+    time_difference = []
+    for i in range(1, len(data)):
+        time_difference.append(data[i][0]-data[i-1][0])
+    return time_difference
+
+#Type of keyboard
+
+#Create final data
+def create_final_data(data):
+    side = side_calculations(data)
+    time_difference = key_time_difference(data)
+    keyboard = data[0][2]
+    final_data = []
+    for i in range(len(side)):
+        final_data.append((time_difference[i], side[i], keyboard))
+    return final_data
+
+#Running test
+def run_test():
+    print("Running test")
+    file_name = "test.csv"
+    create_csv_file(file_name)
+    data = create_final_data(mock_data)
+    save_data(file_name, data)
+    print("Finished test")
+
+run_test()
 
