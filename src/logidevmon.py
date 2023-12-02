@@ -161,3 +161,5 @@ def read_events(callback):
 def read_events_time(callback, timeout):
     asyncio.get_event_loop().run_until_complete(asyncio.wait_for(_read_events(callback), timeout=timeout))
 
+def create_read_events_task(callback):
+    return asyncio.create_task(_read_events(callback))

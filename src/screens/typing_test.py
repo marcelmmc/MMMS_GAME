@@ -87,13 +87,13 @@ class TypingTest:
             future_line_size = line_size + space_size + rect.width
 
             # break line if no space
-            if future_line_size + margin > surface.get_width():
+            if future_line_size + margin*2 >= surface.get_width():
                 render_line()
                 
                 sentence_location += len(" ".join(words_in_line)) + 1
                 words_in_line = []
                 line_size = margin
-                y += margin + margin
+                y += margin*2
                 future_line_size = line_size + rect.width
             
             line_size = future_line_size
