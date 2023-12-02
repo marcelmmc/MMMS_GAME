@@ -1,5 +1,4 @@
 import pygame
-from dictionary import Dictionary
 
 white = (255, 255, 255)
 gray = (128,128,128)
@@ -13,12 +12,13 @@ num_sentences = 6
 GAME_FONT = pygame.font.SysFont('Helvetica', font_size)
 
 class TypingTest:
-    def __init__(self):
+    def __init__(self, dictionary, change_screen):
         self.crt_char = 0
         self.wrong_char = False
-        self.word_dict = Dictionary.load_dictionary('english_5k')
+        self.word_dict = dictionary
         self.sentences = self.word_dict.form_sentence(num_word_per_sentence*num_sentences)
         self.blocking_writting = False
+        self.change_screen = change_screen
 
     def run(self, events):
         for event in events:
@@ -28,7 +28,9 @@ class TypingTest:
                     continue
                 
                 name_key = ' ' if event.key == pygame.K_SPACE else pygame.key.name(event.key)
-
+                if name_key == "":
+                    name_key = event.unicode
+                    
                 if self.blocking_writting:
                     self.blocking_writting = not pygame.K_BACKSPACE == event.key
 

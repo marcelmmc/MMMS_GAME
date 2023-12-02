@@ -7,8 +7,13 @@ surface = pygame.display.set_mode((w, h))
 clock = pygame.time.Clock()
 running = True
 
-from screens.typing_test import TypingTest
-screen = TypingTest()
+screen = None
+def change_screen(s):
+    global screen
+    screen = s
+
+from screens.title import TitleScreen
+screen = TitleScreen(change_screen)
 while running:
     events = pygame.event.get()
     for event in events:
