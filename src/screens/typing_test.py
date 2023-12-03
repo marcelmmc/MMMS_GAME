@@ -1,5 +1,6 @@
 import pygame
 import pygame.freetype
+import json
 
 white = (255, 255, 255)
 gray = (128,128,128)
@@ -7,8 +8,7 @@ red = (255, 0, 0)
 green = (0, 255, 0)
 blue = (0, 0, 128)
 font_size = 30
-num_word_per_sentence = 10
-num_sentences = 6
+num_words = 30
 margin = 20
 
 GAME_FONT = pygame.freetype.SysFont("Consolas", font_size)
@@ -21,11 +21,16 @@ class TypingTest:
         self.crt_char = 0
         self.wrong_char = False
         self.word_dict = dictionary
-        self.sentences = self.word_dict.form_sentence(num_word_per_sentence*num_sentences)
+        self.sentences = self.word_dict.form_sentence(num_words)
         self.blocking_writting = False
         self.change_screen = change_screen
         self.words = self.sentences.split()
-        print(self.words, self.sentences)
+        msg = json.dumps({
+            'type': 'start_test',
+            'sentence': self.sentences,
+            'dictionary': self.word_dict.name
+        })
+        print(f"msg:{msg}")
 
     def run(self, events):
         for event in events:
@@ -45,8 +50,13 @@ class TypingTest:
                     self.wrong_char = False
                     self.crt_char += 1
                     if self.crt_char == len(self.sentences):
-                        exit(0)
-                        
+                        msg = json.dumps({
+                            'type': 'end_test',
+                            'sentence': self.sentences,
+                            'dictionary': self.word_dict.name
+                        })
+                        print(f"msg:{msg}")
+                        print("win")
                 else:
                     self.wrong_char = True
                     self.blocking_writting = True

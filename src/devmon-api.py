@@ -3,8 +3,8 @@
 import logidevmon
 import sys
 import os
-import threading
 import asyncio
+import json
 
 keyboardUnitId = 0
 
@@ -16,7 +16,7 @@ for device in logidevmon.LOGITECH_DEVICES:
     if (device["type"] == "keyboard"):
         keyboardUnitId = device['unitId']
 
-if (keyboardUnitId != 0):
+if True: #if (keyboardUnitId != 0):
     print ("Set spykeys on keyboard to true")
     logidevmon.set_spyConfig(keyboardUnitId,False,True,False,False,False)
 
@@ -27,16 +27,41 @@ if (keyboardUnitId != 0):
         # start the game
         child = await asyncio.create_subprocess_exec(
             sys.executable,
+            "-u", # do not buffer stdout
             os.path.join(
                 os.path.dirname(__file__),
                 "TestGame.py" #./TestGame.py
             ),
             stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.STDOUT,
             stdin=asyncio.subprocess.PIPE,
         )
 
-        await child.wait()
+        while True:
+            line = await child.stdout.readline()
+            if not line:
+                break
+
+            message = line.decode("utf-8").strip()
+            print(message)
+            if not message.startswith("msg:"):
+                continue
+
+            msg = json.loads(message[4:])
+            if msg["type"] == "start_test":
+                # do something...
+
+                # msg.sentence
+                # msg.dictionary
+                continue
+            elif msg["type"] == "end_test":
+                # do something...
+
+                # msg.sentence
+                # msg.dictionary
+
+                # communicate results through stdin
+                continue
 
         read_events_task.cancel()
 
