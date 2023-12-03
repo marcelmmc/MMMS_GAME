@@ -11,7 +11,7 @@ red = (255, 0, 0)
 green = (0, 255, 0)
 blue = (0, 0, 128)
 font_size = 30
-num_words = 1
+num_words = 50
 margin = 20
 
 GAME_FONT = pygame.freetype.SysFont("Consolas", font_size)
