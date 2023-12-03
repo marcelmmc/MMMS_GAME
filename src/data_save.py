@@ -102,7 +102,7 @@ def run_test():
     save_data(file_name, data)
     print("Finished test")
 
-run_test()
+#run_test()
 
 def run_save(data_p):
     print("Running save")
