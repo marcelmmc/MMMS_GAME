@@ -76,7 +76,7 @@ if (keyboardUnitId != 0):
                 await asyncio.sleep(.2)
                 child.kill()
                 # display statistics
-                return
+                continue
 
         read_events_task.cancel()
 
@@ -99,12 +99,15 @@ if (keyboardUnitId != 0):
         try:
             await asyncio.gather(read_events_task, subprocess_task)
         except asyncio.CancelledError:
-            exit(child.returncode)
+            #exit(child.returncode)
+            pass
 
     asyncio.run(run_tasks())
 
+    print(unprocessed_key_presses)
     processed_key_presses = convert.process_keypresses(unprocessed_key_presses, logidevmon.LOGITECH_DEVICES[0]["name"])
     processed_key_presses = [i for i in processed_key_presses if i is not None] # remove None
+    print(processed_key_presses)
     run_save(processed_key_presses)
     
     print ("Set spykeys to false")
