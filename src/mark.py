@@ -8,7 +8,7 @@ import csv
 
 pp = pprint.PrettyPrinter(indent=2)
 
-test_time = 10
+test_time = 5
 
 waiting_for_input = input()
 start_time = time.time()
@@ -56,7 +56,8 @@ print(20 * "-")
 processed_key_presses = convert.process_keypresses(unprocessed_key_presses, keyboard_name)
 processed_key_presses = [i for i in processed_key_presses if i is not None] # remove None
 pp.pprint(processed_key_presses)
-
+from data_save import run_save
+run_save(processed_key_presses)
 waiting_for_input = input()
 
 print("Saving results...")
