@@ -18,7 +18,7 @@ char_dict = dict(zip(unique, count))
 
 
 # Plot WPM comparison
-plt.subplot(1, 2, 1)
+plt.subplot(2, 2, 2)
 your_wpm = float(statistics.loc[statistics['type'] == 'wpm']['value'].values[0])
 counts_wpm = [15, 25, your_wpm, 35]
 indices_wpm = np.argsort(counts_wpm)
@@ -29,7 +29,7 @@ plt.ylabel('WPM (words per minute)')
 plt.title('WPM comparison')
 
 # Plot Accuracy comparison
-plt.subplot(1, 2, 2)
+plt.subplot(2, 2, 3)
 your_accuracy = float(statistics.loc[statistics['type'] == 'accuracy']['value'].values[0])
 counts_accuracy = [80, 85, your_accuracy, 90]
 indices_accuracy = np.argsort(counts_accuracy)
@@ -44,7 +44,18 @@ saving = pd.read_csv('saving.csv')
 saving['Time_Difference'] = saving['Time_Difference'].abs()
 
 # Plot Latency per hand
+plt.subplot(2, 2, 4)
+grouped = saving.groupby('side_to_side')['Time_Difference'].mean()
+counts_latency = list(grouped.values)
+indices_latency = np.argsort(counts_latency)
+levels_latency = list(grouped.index)
+bar_colors_latency = ['tab:green', 'tab:orange', 'tab:blue', 'tab:red']
+plt.bar([levels_latency[i] for i in indices_latency], [counts_latency[i] for i in indices_latency], label=[levels_latency[i] for i in indices_latency], color=[bar_colors_latency[i] for i in indices_latency])
+plt.ylabel('Average latency')
+plt.title('Latency per hand')
 
+# Adjust layout
+plt.tight_layout()
 
 # Show the combined plot
 HMQ = Heatmap('qwerty')
