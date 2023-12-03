@@ -71,7 +71,7 @@ def convert_to_one_key(l, keyboard_type):
 
 def process_keypresses(l, keyboard_type):
     result = []
-
+    print(l)
     l = list(itertools.dropwhile(lambda x: not is_pressed(x), l))
 
     currently_pressed = set()
@@ -79,14 +79,18 @@ def process_keypresses(l, keyboard_type):
 
     for keypress in l:
         if is_pressed(keypress):
-            currently_pressed.add(keypress)
-            to_be_released.add(keypress)
+            currently_pressed.add(keypress[2])
+            to_be_released.add(keypress[2])
         else: # key was released
-            matching_element = set(filter(lambda x: same_key(keypress, x), to_be_released))
+            matching_element = set(filter(lambda x: x == keypress[2], to_be_released))
             to_be_released = to_be_released - matching_element
 
         if len(to_be_released) == 0:
-            result.append(convert_to_one_key(list(currently_pressed), keyboard_type))
+            print()
+            result.append(convert_to_one_key(
+                [(0, True, x) for x in currently_pressed],
+                keyboard_type
+            ))
             currently_pressed = set()
 
     return result

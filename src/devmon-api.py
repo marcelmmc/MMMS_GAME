@@ -68,7 +68,7 @@ if True: #if (keyboardUnitId != 0):
     child = None
     def handleEvent(message):
         print (message)
-        return child.returncode is not None
+        return child.returncode is None
 
     async def run_tasks():
         global subprocess_task, read_events_task
