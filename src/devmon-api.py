@@ -5,6 +5,9 @@ import sys
 import os
 import asyncio
 import json
+import time
+from data_save import run_save
+import convert
 
 keyboardUnitId = 0
 
@@ -16,14 +19,14 @@ for device in logidevmon.LOGITECH_DEVICES:
     if (device["type"] == "keyboard"):
         keyboardUnitId = device['unitId']
 
-if True: #if (keyboardUnitId != 0):
+if (keyboardUnitId != 0):
     print ("Set spykeys on keyboard to true")
     logidevmon.set_spyConfig(keyboardUnitId,False,True,False,False,False)
 
     read_events_task = None
     subprocess_task = None
     async def start_game():
-        global child
+        global child, start_time
         # start the game
         child = await asyncio.create_subprocess_exec(
             sys.executable,
@@ -48,26 +51,45 @@ if True: #if (keyboardUnitId != 0):
                 continue
 
             msg = json.loads(message[4:])
-            if msg["type"] == "start_test":
+            if msg["type"] == "ready":
+                m = json.dumps({
+                    "type": "keyboardinfo",
+                    "name": logidevmon.LOGITECH_DEVICES[0]["name"],
+                })
+                child.stdin.write(bytes(f"msg:{m}\n", "utf-8"))
+                continue
+            elif msg["type"] == "start_test":
                 # do something...
-
+                start_time = time.time()
+                unprocessed_key_presses.clear()
                 # msg.sentence
                 # msg.dictionary
+                continue
+            elif msg["type"] == "quit":
+                child.kill()
                 continue
             elif msg["type"] == "end_test":
                 # do something...
 
                 # msg.sentence
                 # msg.dictionary
-
-                # communicate results through stdin
-                continue
+                await asyncio.sleep(.2)
+                child.kill()
+                # display statistics
+                return
 
         read_events_task.cancel()
 
     child = None
+    start_time = time.time()
+    unprocessed_key_presses = []
     def handleEvent(message):
-        print (message)
+        time_elapsed = time.time() - start_time
+        decoded = json.loads(message)
+        info = (time_elapsed, decoded['value']['pressed'], decoded['value']['vkey'])
+        unprocessed_key_presses.append(info)
+        print(f"{info}")
+        print (f"{time_elapsed}: {message}")
         return child.returncode is None
 
     async def run_tasks():
@@ -80,8 +102,15 @@ if True: #if (keyboardUnitId != 0):
             exit(child.returncode)
 
     asyncio.run(run_tasks())
+
+    processed_key_presses = convert.process_keypresses(unprocessed_key_presses, logidevmon.LOGITECH_DEVICES[0]["name"])
+    processed_key_presses = [i for i in processed_key_presses if i is not None] # remove None
+    run_save(processed_key_presses)
     
     print ("Set spykeys to false")
-    logidevmon.set_spyConfig(keyboardUnitId, False, False, False, False, False)
+    try:
+        logidevmon.set_spyConfig(keyboardUnitId, False, False, False, False, False)
+    except:
+        pass
 
 print ("End")

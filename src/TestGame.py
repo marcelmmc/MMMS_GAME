@@ -1,4 +1,8 @@
 import pygame
+import stdin
+import json
+
+stdin.start_read_stdin_thread()
 
 pygame.init()
 w = 1280
@@ -29,4 +33,8 @@ while running:
     # screen.blit(text, textRect)
     clock.tick(60)  # limits FPS to 60
 
+msg = json.dumps({
+    'type': "quit"
+})
+print(f"msg:{msg}")
 pygame.quit()

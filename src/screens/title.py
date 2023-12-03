@@ -1,7 +1,9 @@
+import json
 import pygame
 from dictionary import Dictionary
 from typing import List
 from screens.typing_test import TypingTest
+import stdin
 
 title_font = pygame.font.SysFont("Helvetica", 50)
 selection_font = pygame.font.SysFont("Helvetica", 25)
@@ -10,6 +12,10 @@ class TitleScreen:
         self.change_screen = change_screen
         self.dictionaries = Dictionary.list_dictionaries()
         self.selected_dictionary = 0
+        msg = json.dumps({
+            'type': 'ready'
+        })
+        print(f"msg:{msg}")
 
     def run(self, events: List[pygame.event.Event]):
         for event in events:
@@ -45,6 +51,18 @@ class TitleScreen:
         )
 
         dy = 100 + title.get_height() + 20
+
+        if stdin.keyboard_name is not None:
+            keyboard_name = selection_font.render(stdin.keyboard_name, True, (255, 255, 255))
+            surface.blit(
+                keyboard_name,
+                (
+                    cx - keyboard_name.get_width()/2,
+                    dy
+                )
+            )
+            dy += keyboard_name.get_height() + 20
+        
         for i in range(
             max(0, self.selected_dictionary - 2),
             min(len(self.dictionaries) - 1, self.selected_dictionary + 5) + 1
