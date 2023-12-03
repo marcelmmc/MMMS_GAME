@@ -8,7 +8,7 @@ import csv
 
 pp = pprint.PrettyPrinter(indent=2)
 
-test_time = 5
+test_time = 4
 
 waiting_for_input = input()
 start_time = time.time()
