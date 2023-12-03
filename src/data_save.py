@@ -2,7 +2,6 @@
 import csv
 from definitions import *
 
-print("Data Save")
 #--------------------------------------------------
 # Data Save
 #--------------------------------------------------
@@ -13,7 +12,7 @@ def create_csv_file(file_name):
         writer.writerow(field)
 
 def save_data(file_name, data):
-    with open(file_name, 'w', newline='') as csvfile:
+    with open(file_name, 'a', newline='') as csvfile:
         writer = csv.writer(csvfile)
         for input in data:
             writer.writerow(input)
@@ -46,21 +45,21 @@ def key_side_to_side(key1, key2):
     
 #modify data with side_to_side
 def side_calculations(data):
-    """"
-    dict_data = [{'timestamp':i[0], 'character':i[1], 'device_type':i[2]} for i in data]
-    frame = pd.DataFrame(dict_data)
-    """
     side = []
     for i in range(1, len(data)):
         side.append(key_side_to_side(data[i-1][1],data[i][1]))
     return side
 
 #key time difference
+import pandas as pd
 def key_time_difference(data):
     time_difference = []
-    for i in range(1, len(data)):
-        time_difference.append(data[i][0]-data[i-1][0])
-    return time_difference
+    dict_data = [{'timestamp':i[0], 'character':i[1], 'device_type':i[2]} for i in data]
+    frame = pd.DataFrame(dict_data)
+    l = frame['timestamp'].round(6)
+    l = l.diff().values.tolist()
+    l = [ '%.6f' % elem for elem in l ]
+    return l[1::]
 
 #Type of keyboard
 def keyboard_type(keyboard):
@@ -74,9 +73,9 @@ def keyboard_type(keyboard):
         return keyboards[3]
 #Erase backspace and space
 def clean_data(data):
-    data_clean = data
+    data_clean = []
     for i in range(len(data)):
-        if data[i][1] != ' ' or data[i][1] != '':
+        if data[i][1] != " " and data[i][1] != "":
             data_clean.append(data[i])
     return data_clean
 
@@ -99,9 +98,16 @@ def run_test():
     print("Running test")
     file_name = "test.csv"
     create_csv_file(file_name)
-    data = create_final_data(mock_key)
+    data = create_final_data(mock_data)
     save_data(file_name, data)
     print("Finished test")
 
 run_test()
 
+def run_save(data_p):
+    print("Running save")
+    file_name = "saving.csv"
+    create_csv_file(file_name)
+    data = create_final_data(data_p)
+    save_data(file_name, data)
+    print("Finished save")
