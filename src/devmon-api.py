@@ -8,6 +8,7 @@ import json
 import time
 from data_save import run_save
 import convert
+import subprocess
 
 keyboardUnitId = 0
 
@@ -109,6 +110,14 @@ if (keyboardUnitId != 0):
     processed_key_presses = [i for i in processed_key_presses if i is not None] # remove None
     print(processed_key_presses)
     run_save(processed_key_presses)
+
+    subprocess.run([
+        sys.executable,
+        os.path.join(
+            os.path.dirname(__file__),
+            "visualisation_script.py"
+        ),
+    ])
     
     print ("Set spykeys to false")
     try:
